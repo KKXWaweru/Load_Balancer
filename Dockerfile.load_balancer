@@ -16,4 +16,4 @@ COPY . /
 EXPOSE 5001
 
 # Run the load balancer application
-CMD ["python", "load_balancer.py"]
+CMD ["python", "Load_Balancer.py"]

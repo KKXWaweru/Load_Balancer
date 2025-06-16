@@ -1,5 +1,5 @@
 """
-consistent_hash_map.py
+Consistent_Hash_Map.py
 
 Responsible for implementing the hash algorithm for the load balancer
 """

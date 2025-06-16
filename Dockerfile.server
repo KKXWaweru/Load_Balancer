@@ -16,4 +16,4 @@ COPY . /
 EXPOSE 5000
 
 # Run the Flask application with the specified server ID
-CMD ["python", "server.py"]
+CMD ["python", "Server.py"]
