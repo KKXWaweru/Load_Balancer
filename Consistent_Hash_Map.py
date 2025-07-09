@@ -12,6 +12,7 @@ class ConsistentHashMap:
         self.num_slots = num_slots
         self.servers = []
         self.virtual_servers = {}
+        self.server_ids = set()
         self.num_virtual_servers = 100  # Increase the number of virtual nodes
         for i in range(
             1, num_servers + 1
@@ -36,6 +37,10 @@ class ConsistentHashMap:
         return hashed_value
 
     def add_server(self, server_id):
+        if server_id in self.server_ids:
+            print(f"Server {server_id} already exists. Skipping.")
+            return
+        self.server_ids.add(server_id)
         print(f"Adding server {server_id}...")
         for virtual_id in range(self.num_virtual_servers):
             slot = self.hash_server(server_id, virtual_id)
@@ -58,6 +63,7 @@ class ConsistentHashMap:
         self.servers.sort()
         print(f"Server {server_id} added. Current servers: {self.servers}")
         print(f"Current virtual servers mapping: {self.virtual_servers}")
+        
 
     def remove_server(self, server_id):
         print(f"Removing server {server_id}...")
@@ -69,6 +75,7 @@ class ConsistentHashMap:
         for slot in slots_to_remove:
             del self.virtual_servers[slot]
             self.servers.remove(slot)
+            self.server_ids.discard(server_id)
         print(f"Server {server_id} removed. Current servers: {self.servers}")
         print(f"Current virtual servers mapping: {self.virtual_servers}")
 
