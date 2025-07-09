@@ -14,7 +14,7 @@ app = Flask(__name__)
 # Initialize active servers from environment variable
 active_servers = os.getenv("ACTIVE_SERVERS", "1 2 3").split()
 num_slots = 1024  # Increase the number of slots for better distribution
-consistent_hash_map = ConsistentHashMap(len(active_servers), num_slots)
+Consistent_Hash_Map = ConsistentHashMap(len(active_servers), num_slots)
 
 # Dictionary to store requests mapped to servers
 requests_mapping = {server: [] for server in active_servers}
@@ -65,7 +65,7 @@ def add_server():
     for hostname in hostnames:
         active_servers.append(hostname)
         requests_mapping[hostname] = []  # Initialize request mapping for new server
-        consistent_hash_map.add_server(hostname)  # Update the consistent hash map
+        Consistent_Hash_Map.add_server(hostname)  # Update the consistent hash map
 
     print(f"Current active servers: {active_servers}")
     return (
@@ -100,7 +100,7 @@ def remove_server():
                 hostname, None
             )  # Remove request mapping for removed server
 
-    consistent_hash_map.remove_server(hostname)  # Update existing consistent hash map
+    Consistent_Hash_Map.remove_server(hostname)  # Update existing consistent hash map
     return (
         jsonify(
             {
@@ -114,7 +114,7 @@ def remove_server():
 
 @app.route("/<path:path>", methods=["GET"])
 def route_request(path):
-    server_id = consistent_hash_map.get_server(path)
+    server_id = Consistent_Hash_Map.get_server(path)
     try:
         response = requests.get(f"http://server{server_id}:5000/home")
         response.raise_for_status()  # Raise an error for bad responses
@@ -150,7 +150,7 @@ def get_requests_mapped_to_server(server_id):
 @app.route("/request", methods=["GET"])
 def handle_request():
     request_id = int(request.args.get("request_id"))
-    server_id = consistent_hash_map.get_server(str(request_id))
+    server_id = Consistent_Hash_Map.get_server(str(request_id))
     try:
         response = requests.get(f"http://server{server_id}:5000/home")
         response.raise_for_status()  # Raise an error for bad responses
